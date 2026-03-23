@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ brand_name }} × {{ company }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Inter', sans-serif; color: #1e293b; background: #ffffff; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+
+    /* ── Design tokens ────────────────────────────────────────── */
+    :root {
+      --navy:   #0f172a;
+      --navy2:  #1e293b;
+      --white:  #ffffff;
+      --amber:  #f59e0b;
+      --amber2: #d97706;
+      --gray:   #f1f5f9;
+      --gray2:  #e2e8f0;
+      --text:   #1e293b;
+      --muted:  #64748b;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08);
+    }
+
+    /* ── Layout ───────────────────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section    { padding: 80px 0; }
+
+    /* ── Typography ───────────────────────────────────────────── */
+    h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 900; line-height: 1.15; }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.25rem); font-weight: 800; line-height: 1.2; }
+    h3 { font-size: 1.15rem; font-weight: 700; }
+    p  { font-size: 1.05rem; color: var(--muted); }
+
+    /* ── Buttons ──────────────────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .btn-primary {
+      background: var(--amber);
+      color: var(--navy);
+    }
+    .btn-primary:hover {
+      background: var(--amber2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245,158,11,.35);
+    }
+    .btn-outline {
+      border: 2px solid var(--amber);
+      color: var(--amber);
+      background: transparent;
+    }
+    .btn-outline:hover {
+      background: var(--amber);
+      color: var(--navy);
+      transform: translateY(-2px);
+    }
+    .btn-lg { padding: 18px 40px; font-size: 1.1rem; }
+
+    /* ══════════════════════════════════════════════════════════════
+       1. NAVBAR
+    ══════════════════════════════════════════════════════════════ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .navbar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .navbar__brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.5px;
+    }
+    .navbar__brand span { color: var(--amber); }
+
+    /* ══════════════════════════════════════════════════════════════
+       2. HERO
+    ══════════════════════════════════════════════════════════════ */
+    .hero {
+      background: var(--navy);
+      color: var(--white);
+      padding: 100px 0 80px;
+    }
+    .hero__badge {
+      display: inline-block;
+      background: rgba(245,158,11,.15);
+      border: 1px solid rgba(245,158,11,.35);
+      color: var(--amber);
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+    }
+    .hero h1 { color: var(--white); max-width: 820px; margin-bottom: 20px; }
+    .hero__sub {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,.7);
+      max-width: 680px;
+      margin-bottom: 20px;
+      line-height: 1.65;
+    }
+    .hero__opener {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.6);
+      max-width: 680px;
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+    .hero__trust {
+      margin-top: 16px;
+      font-size: .85rem;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .03em;
+    }
+    .hero__trust span { margin: 0 6px; }
+
+    /* ══════════════════════════════════════════════════════════════
+       3. COMPANY SPOTLIGHT
+    ══════════════════════════════════════════════════════════════ */
+    .spotlight { background: var(--white); }
+    .spotlight__title {
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--amber2);
+      margin-bottom: 12px;
+    }
+    .spotlight h2 { color: var(--navy); margin-bottom: 28px; }
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gray);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--navy2);
+    }
+    .pill__dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      flex-shrink: 0;
+    }
+    .spotlight__body {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 740px;
+      margin-bottom: 20px;
+      line-height: 1.75;
+    }
+    .spotlight__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--amber2);
+    }
+    .spotlight__link:hover { text-decoration: underline; }
+
+    /* ══════════════════════════════════════════════════════════════
+       4. PAIN POINTS
+    ══════════════════════════════════════════════════════════════ */
+    .pains { background: var(--gray); }
+    .pains h2 { color: var(--navy); margin-bottom: 48px; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(0,0,0,.12);
+    }
+    .card__icon {
+      width: 48px; height: 48px;
+      margin-bottom: 20px;
+      color: var(--amber);
+    }
+    .card h3 { color: var(--navy); margin-bottom: 10px; }
+    .card p  { font-size: .95rem; line-height: 1.65; }
+
+    /* ══════════════════════════════════════════════════════════════
+       5. SOLUTIONS
+    ══════════════════════════════════════════════════════════════ */
+    .solutions { background: var(--white); }
+    .solutions h2 { color: var(--navy); margin-bottom: 48px; }
+    .solution-card {
+      background: var(--gray);
+      border-radius: var(--radius);
+      padding: 32px;
+      border-left: 4px solid var(--amber);
+      transition: transform .2s ease;
+    }
+    .solution-card:hover { transform: translateY(-3px); }
+    .solution-card h3 { color: var(--navy); margin-bottom: 10px; }
+    .solution-card p  { font-size: .95rem; line-height: 1.65; margin-bottom: 16px; }
+    .solution-card__link {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--amber2);
+    }
+    .solution-card__link:hover { text-decoration: underline; }
+
+    /* ══════════════════════════════════════════════════════════════
+       6. WHATSAPP SPOTLIGHT
+    ══════════════════════════════════════════════════════════════ */
+    .wa-section {
+      background: linear-gradient(135deg, #78350f 0%, #92400e 50%, #78350f 100%);
+      color: var(--white);
+    }
+    .wa-section__inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: center;
+    }
+    .wa-section h2 { color: var(--white); margin-bottom: 16px; font-size: 1.75rem; }
+    .wa-section p  { color: rgba(255,255,255,.85); line-height: 1.7; font-size: 1.05rem; }
+    .wa-section__stat {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+    .wa-icon {
+      width: 96px; height: 96px;
+      flex-shrink: 0;
+      opacity: .25;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       7. ABOUT US
+    ══════════════════════════════════════════════════════════════ */
+    .about { background: var(--white); }
+    .about__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .about h2 { color: var(--navy); margin-bottom: 20px; }
+    .about__body { font-size: 1rem; color: var(--muted); line-height: 1.75; margin-bottom: 16px; }
+    .about__location { font-size: .9rem; font-weight: 600; color: var(--amber2); }
+    .services-list { list-style: none; }
+    .services-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray2);
+      font-size: .95rem;
+      color: var(--text);
+    }
+    .services-list li:last-child { border-bottom: none; }
+    .services-list__check {
+      color: var(--amber);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       8. SOCIAL PROOF
+    ══════════════════════════════════════════════════════════════ */
+    .social-proof { background: var(--gray); }
+    .social-proof h2 { color: var(--navy); margin-bottom: 48px; }
+    .testimonial-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '\201C';
+      position: absolute;
+      top: 16px; left: 24px;
+      font-size: 4rem;
+      line-height: 1;
+      color: var(--amber);
+      opacity: .3;
+      font-family: Georgia, serif;
+    }
+    .testimonial-card__quote {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 20px;
+      padding-top: 28px;
+    }
+    .testimonial-card__author { font-weight: 700; color: var(--navy); font-size: .95rem; }
+    .testimonial-card__role   { font-size: .85rem; color: var(--muted); }
+
+    /* ══════════════════════════════════════════════════════════════
+       9. FINAL CTA
+    ══════════════════════════════════════════════════════════════ */
+    .final-cta {
+      background: var(--navy);
+      color: var(--white);
+      text-align: center;
+    }
+    .final-cta h2 { color: var(--white); max-width: 700px; margin: 0 auto 20px; }
+    .final-cta__sub {
+      color: rgba(255,255,255,.6);
+      max-width: 560px;
+      margin: 0 auto 36px;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .final-cta__secondary {
+      margin-top: 20px;
+      font-size: .85rem;
+      color: rgba(255,255,255,.4);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       10. FOOTER
+    ══════════════════════════════════════════════════════════════ */
+    .footer {
+      background: #060e1e;
+      padding: 28px 0;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer__brand {
+      font-size: .9rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.6);
+    }
+    .footer__brand span { color: var(--amber); }
+    .footer__personal {
+      font-size: .8rem;
+      color: rgba(255,255,255,.3);
+      text-align: right;
+    }
+
+    /* ── Section headings helper ──────────────────────────────── */
+    .section-label {
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--amber2);
+      margin-bottom: 10px;
+    }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      section       { padding: 56px 0; }
+      .hero         { padding: 72px 0 56px; }
+      .about__grid  { grid-template-columns: 1fr; gap: 40px; }
+      .wa-section__inner { grid-template-columns: 1fr; }
+      .wa-icon      { display: none; }
+      .footer__inner { flex-direction: column; align-items: flex-start; }
+      .footer__personal { text-align: left; }
+    }
+    @media (max-width: 480px) {
+      .btn-lg { padding: 16px 28px; font-size: 1rem; }
+      h1      { font-size: 1.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. NAVBAR
+  ══════════════════════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="container navbar__inner">
+      <a href="#" class="navbar__brand">
+        {{ brand_name | replace(' ', '&nbsp;') | safe }}<span>.</span>
+      </a>
+      <a href="{{ calendly_link }}" class="btn btn-primary" target="_blank" rel="noopener">
+        Book a Call
+      </a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero__badge">Built exclusively for {{ company }}</div>
+      <h1>{{ hero_headline }}</h1>
+      <p class="hero__sub">{{ hero_subheadline }}</p>
+      <p class="hero__opener">{{ opener }}</p>
+      <a href="{{ calendly_link }}" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+        {{ cta_button_text }}
+      </a>
+      <p class="hero__trust">
+        <span>No commitment</span>·
+        <span>Free 30-min strategy call</span>·
+        <span>UAE-focused</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. COMPANY SPOTLIGHT
+  ══════════════════════════════════════════════════════════ -->
+  <section class="spotlight" id="spotlight">
+    <div class="container">
+      <p class="spotlight__title">Company Spotlight</p>
+      <h2>What we know about {{ company }}</h2>
+
+      <div class="pills">
+        {% if sub_industry %}
+        <div class="pill">
+          <div class="pill__dot"></div>
+          {{ sub_industry }}
+        </div>
+        {% endif %}
+        {% if company_size %}
+        <div class="pill">
+          <div class="pill__dot"></div>
+          {{ company_size }} people
+        </div>
+        {% endif %}
+        {% if revenue_aed %}
+        <div class="pill">
+          <div class="pill__dot"></div>
+          Est. {{ revenue_aed }}
+        </div>
+        {% endif %}
+        {% if tier %}
+        <div class="pill">
+          <div class="pill__dot"></div>
+          Tier {{ tier }} prospect
+        </div>
+        {% endif %}
+      </div>
+
+      <p class="spotlight__body">{{ company_context }}</p>
+
+      {% if website %}
+      <a href="{{ website }}" class="spotlight__link" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        Visit {{ company }}'s website
+      </a>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. PAIN POINTS
+  ══════════════════════════════════════════════════════════ -->
+  <section class="pains" id="pains">
+    <div class="container">
+      <p class="section-label">The Real Problems</p>
+      <h2>The 3 challenges holding {{ company }} back</h2>
+
+      <div class="cards">
+
+        <!-- Pain 1 -->
+        <div class="card">
+          <svg class="card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+            <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <h3>{{ pain_1_title }}</h3>
+          <p>{{ pain_1_body }}</p>
+        </div>
+
+        <!-- Pain 2 -->
+        <div class="card">
+          <svg class="card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <h3>{{ pain_2_title }}</h3>
+          <p>{{ pain_2_body }}</p>
+        </div>
+
+        <!-- Pain 3 -->
+        <div class="card">
+          <svg class="card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4l3 3"/>
+          </svg>
+          <h3>{{ pain_3_title }}</h3>
+          <p>{{ pain_3_body }}</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. OUR SOLUTIONS
+  ══════════════════════════════════════════════════════════ -->
+  <section class="solutions" id="solutions">
+    <div class="container">
+      <p class="section-label">How We Help</p>
+      <h2>How we solve each one</h2>
+
+      <div class="cards">
+
+        <div class="solution-card">
+          <h3>{{ solution_1_title }}</h3>
+          <p>{{ solution_1_body }}</p>
+          <a href="#contact" class="solution-card__link">→ Learn more</a>
+        </div>
+
+        <div class="solution-card">
+          <h3>{{ solution_2_title }}</h3>
+          <p>{{ solution_2_body }}</p>
+          <a href="#contact" class="solution-card__link">→ Learn more</a>
+        </div>
+
+        <div class="solution-card">
+          <h3>{{ solution_3_title }}</h3>
+          <p>{{ solution_3_body }}</p>
+          <a href="#contact" class="solution-card__link">→ Learn more</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. WHATSAPP SPOTLIGHT
+  ══════════════════════════════════════════════════════════ -->
+  <section class="wa-section" id="whatsapp">
+    <div class="container">
+      <div class="wa-section__inner">
+        <div>
+          <p class="section-label" style="color:rgba(255,255,255,.5);">WhatsApp Automation</p>
+          <h2>{{ wa_use_case_title }}</h2>
+          <p>{{ wa_use_case_body }}</p>
+          <div class="wa-section__stat">
+            ↑ Typical result: 25–35% uplift in repeat revenue
+          </div>
+        </div>
+        <!-- WhatsApp SVG icon -->
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor" style="color:white;">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. ABOUT US
+  ══════════════════════════════════════════════════════════ -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about__grid">
+        <div>
+          <p class="section-label">Who We Are</p>
+          <h2>{{ about_us.headline }}</h2>
+          <p class="about__body">{{ about_us.body }}</p>
+          <p class="about__body" style="font-weight:600; color:#0f172a;">
+            {{ about_us.tagline }}
+          </p>
+          <p class="about__location">📍 {{ about_us.location }}</p>
+        </div>
+        <div>
+          <p class="section-label">Our Services</p>
+          <ul class="services-list">
+            {% for service in about_us.services %}
+            <li>
+              <svg class="services-list__check" width="16" height="16" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              {{ service }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. SOCIAL PROOF
+  ══════════════════════════════════════════════════════════ -->
+  <section class="social-proof" id="testimonials">
+    <div class="container">
+      <p class="section-label">Client Results</p>
+      <h2>What our clients say</h2>
+
+      <div class="cards">
+        {% for t in testimonials %}
+        <div class="testimonial-card">
+          <p class="testimonial-card__quote">{{ t.quote }}</p>
+          <p class="testimonial-card__author">{{ t.name }}</p>
+          <p class="testimonial-card__role">{{ t.role }}, {{ t.company }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. FINAL CTA
+  ══════════════════════════════════════════════════════════ -->
+  <section class="final-cta" id="contact">
+    <div class="container">
+      <p class="section-label" style="color:rgba(255,255,255,.4);">Next Step</p>
+      <h2>{{ cta_headline }}</h2>
+      <p class="final-cta__sub">
+        We'll prepare a free growth audit specific to {{ company }} before the call
+        — no templates, no fluff.
+      </p>
+      <a href="{{ calendly_link }}" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+        {{ cta_button_text }}
+      </a>
+      <p class="final-cta__secondary">Or reply directly to the email you received.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__brand">
+        {{ brand_name }}<span>.</span> &nbsp;·&nbsp; Dubai, UAE
+      </p>
+      <p class="footer__personal">
+        This page was built for {{ first_name }} at {{ company }}
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
